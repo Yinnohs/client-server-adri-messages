@@ -9,8 +9,9 @@ public class SocketServer {
     public void start(int port) {
         try {
             this.serverSocket = new ServerSocket(port);
+            MessagesStorage messageStorage = new MessagesStorage();
             while (true)
-                new ConnectionHandler(serverSocket.accept()).start();
+                new ConnectionHandler(serverSocket.accept(), messageStorage).start();
         } catch (IOException e) {
             e.printStackTrace();
         }
