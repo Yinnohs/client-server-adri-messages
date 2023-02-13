@@ -8,10 +8,12 @@ import java.util.Date;
 
 public class ConnectionHandler extends Thread {
     private Socket clientSocket;
+    private MessagesStorage messageStorage; 
 
 
-    public ConnectionHandler(Socket socket) {
+    public ConnectionHandler(Socket socket, MessagesStorage messageStorage ) {
         this.clientSocket = socket;
+        this.messageStorage = messageStorage;
     }
 
     public void run() {
@@ -33,11 +35,20 @@ public class ConnectionHandler extends Thread {
             System.out.println("---------------------------");
             String clientName = downStream.readUTF();
 
+            if(this.messageStorage.length.get() != 0){
+                String messages = this.messageStorage.getAllMessages();
+                upStream.writeUTF(messages);
+            }else{
+                upStream.writeUTF("");
+            }
+
             while (true) {
                 clientMsg = downStream.readUTF();
 
                 if(clientMsg.contains("message")){
+                    int  userMessageIndex = clientMsg.indexOf(":") + 1;
                     prevMessage =  clientMsg.substring(0, clientMsg.indexOf(":"));
+                    clientMsg = clientMsg.substring( userMessageIndex, clientMsg.length());
                 }
                 
                 curDate = new Date();
@@ -45,8 +56,9 @@ public class ConnectionHandler extends Thread {
                 messageTime = formatTime.format(curDate);
 
                 if(prevMessage.equals("message")){
-                    toClientMsg = "[MENSAJE DEL SISTEMA]["+messageTime+"] "+ clientName + ": " + clientMsg;
-                    System.out.println(toClientMsg);
+                    toClientMsg = "["+messageTime+"]<"+ clientName + ">:" + clientMsg;
+                    System.out.println("[MENSAJE DEL SISTEMA]"+toClientMsg);
+                    messageStorage.addMessage(toClientMsg);
                     upStream.writeUTF(toClientMsg);
                 }else{
                     upStream.writeUTF("");
@@ -54,10 +66,13 @@ public class ConnectionHandler extends Thread {
                 prevMessage = "";
 
                 if (clientMsg.equals("bye")) {
+                    upStream.writeUTF("goodbye");
                     break;
                 }
             }
             downStream.close();
+            upStream.close();
+            
             System.out.println("[MENSAJE DEL SERVIDOR]: " + clientName + " ha cerrado la conexión.");
         } catch (Exception e) {
             System.err.println(e);

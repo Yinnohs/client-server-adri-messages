@@ -16,7 +16,6 @@ public class SocketClient {
 
                 InetAddress myIp = InetAddress.getLocalHost();
                 Socket socket = new Socket(myIp, 5005);
-    
                 Scanner scanner = new Scanner(System.in);
                 DataOutputStream upStream = new DataOutputStream(socket.getOutputStream());
                 DataInputStream downStream = new DataInputStream(socket.getInputStream());
@@ -24,28 +23,39 @@ public class SocketClient {
                 System.out.println("¿Cómo te llamas?");
                 String name = scanner.nextLine();
                 upStream.writeUTF(name);
-    
+
+                String chatMessages = downStream.readUTF();
+
+                if(chatMessages.length() != 0){
+                    System.out.println(chatMessages);
+                }
+                System.out.println("Bienvenido al chat de texto");
                 while (true) {
-                    System.out.println("Introduce el mensaje pal servidor:");
-                    String message = scanner.nextLine();
+                    String message = "";
+                    String serverMessage ="";
+                    System.out.print("#: ");
+
+                    message = scanner.nextLine();
+                    
+                    //sends message to the server
                     upStream.writeUTF(message);
-                    String serverMessage = downStream.readUTF();
-                    if(serverMessage.length() != 0){
-                        System.out.println();
-                    }
-    
+
                     if (message.equals("bye")) {
+                        System.out.println("goodbye");
                         break;
                     }
+
+                    if(serverMessage.length() != 0){
+                        System.out.println(serverMessage);
+                    }
                 }
-    
-                upStream.close();
                 scanner.close();
                 socket.close();
-    
+                upStream.close();
             } catch (IOException e) {
-                System.err.println(e);
+                System.out.println();
             }
         }
+
     }
 }
