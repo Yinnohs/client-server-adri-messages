@@ -2,18 +2,20 @@ package socketServer;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ConnectionHandler extends Thread {
     private Socket clientSocket;
-    private MessagesStorage messageStorage; 
+    private SocketServer server;
+    public DataOutputStream upStream;
+    public DataInputStream downStream;
 
-
-    public ConnectionHandler(Socket socket, MessagesStorage messageStorage ) {
+    public ConnectionHandler(Socket socket, SocketServer server ) {
         this.clientSocket = socket;
-        this.messageStorage = messageStorage;
+        this.server = server;
     }
 
     public void run() {
@@ -26,8 +28,8 @@ public class ConnectionHandler extends Thread {
             String messageTime;
             String prevMessage = "";
 
-            DataOutputStream upStream = new DataOutputStream(this.clientSocket.getOutputStream());
-            DataInputStream downStream = new DataInputStream(this.clientSocket.getInputStream());
+            upStream = new DataOutputStream(this.clientSocket.getOutputStream());
+            downStream = new DataInputStream(this.clientSocket.getInputStream());
 
             msg = "Conexión Realizada en la dirección: " + this.clientSocket.getInetAddress().toString();
             System.out.println("---------------------------");
@@ -35,8 +37,8 @@ public class ConnectionHandler extends Thread {
             System.out.println("---------------------------");
             String clientName = downStream.readUTF();
 
-            if(this.messageStorage.length.get() != 0){
-                String messages = this.messageStorage.getAllMessages();
+            if(this.server.getStorageLegth() != 0){
+                String messages = this.server.getAllMessages();
                 upStream.writeUTF(messages);
             }else{
                 upStream.writeUTF("");
@@ -58,8 +60,8 @@ public class ConnectionHandler extends Thread {
                 if(prevMessage.equals("message")){
                     toClientMsg = "["+messageTime+"]<"+ clientName + ">:" + clientMsg;
                     System.out.println("[MENSAJE DEL SISTEMA]"+toClientMsg);
-                    messageStorage.addMessage(toClientMsg);
-                    upStream.writeUTF(toClientMsg);
+                    server.storeMessage(toClientMsg);
+                    server.broadcast(toClientMsg);
                 }else{
                     upStream.writeUTF("");
                 }
@@ -77,6 +79,14 @@ public class ConnectionHandler extends Thread {
         } catch (Exception e) {
             System.err.println(e);
             System.err.println("Se ha cerrado la conexión de un cliente.");
+        }
+    }
+
+    public void sendMessage (String message){
+        try {
+            this.upStream.writeUTF(message);
+        } catch (IOException e) {
+            System.err.println(e);
         }
     }
 }

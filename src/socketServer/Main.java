@@ -1,8 +1,10 @@
 package socketServer;
 
+import socketServer.server.Server;
+
 public class Main {
     public static void main(String[] args) {
-        SocketServer server = new SocketServer();
-        server.start(5005);
+        Server server = new Server(5005);
+        server.execute();
     }
 }
