@@ -1,5 +1,5 @@
 
-package socketServer;
+package socketServer.server;
 
 import java.util.ArrayList;
 import java.util.List;
