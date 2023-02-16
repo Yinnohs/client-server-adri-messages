@@ -67,5 +67,10 @@ public class Server {
     protected boolean hasUsers() {
         return !this.userNames.isEmpty();
     }
+
+    public static void main(String[] args) {
+        Server server = new Server(5005);
+        server.execute();
+    }
     
 }

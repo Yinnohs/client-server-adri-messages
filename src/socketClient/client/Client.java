@@ -39,4 +39,9 @@ public class Client {
     String getUserName() {
         return this.userName;
     }
+
+    public static void main(String[] args) {
+        Client client = new Client("localhost", 5005);
+        client.execute(); 
+    }
 }
