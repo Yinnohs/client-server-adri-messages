@@ -11,12 +11,10 @@ public class MessageReader extends Thread {
     // Instanciación de atributos.
     private BufferedReader reader; // Buffer de lectura.
     private Socket socket; // Conexión actual con el servidor.
-    private Client client; // Cliente (Hilo padre).
  
     // Constructor.
-    public MessageReader(Socket socket, Client client) {
+    public MessageReader(Socket socket) {
         this.socket = socket;
-        this.client = client;
  
         try {
             // Instanciación del stream de datos de entrada.

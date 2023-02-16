@@ -10,14 +10,9 @@ import java.net.Socket;
 public class MessageSender extends Thread {
     // Instanciación de atributos.
     private PrintWriter writer; // Clase que se encarga de enviar mensajes al servidor.
-    private Socket socket; // Conexión con el servidor.
-    private Client client; // Hilo padre.
  
     // Constructor.
-    public MessageSender(Socket socket, Client client) {
-        this.socket = socket;
-        this.client = client;
- 
+    public MessageSender(Socket socket) {
         try {
             // Instanciación del stream de datos de salida al servidor.
             OutputStream output = socket.getOutputStream();
@@ -36,7 +31,7 @@ public class MessageSender extends Thread {
             // Petición de nombre de usuario.
             String userName = console.readLine("\nColoca tu nombre: ");
             // Seteo del nombre del usuario.
-            client.setUserName(userName);
+            // client.setUserName(userName);
             // Nombre del usuario enviado al servidor.
             writer.println(userName);
     
@@ -54,5 +49,4 @@ public class MessageSender extends Thread {
             System.out.println("[Error del Servidor]: " + e.getMessage());
         }
     }
-    
 }
