@@ -43,13 +43,8 @@ public class ClientHandler extends Thread {
             String prevMessage = "";
 
  
-            while(true){
+            do{
                 clientMsg = reader.readLine();
-
-                if(clientMsg.equals("bye")){
-                    sendMessage("goodbye");
-                    break;
-                }
 
                 if(clientMsg.contains("message:")){
                     int  userMessageIndex = clientMsg.indexOf(":") + 1;
@@ -70,13 +65,18 @@ public class ClientHandler extends Thread {
 
                 prevMessage = "";
 
-            } 
+            }while(!clientMsg.equals("bye"));
+            
+            sendMessage("goodbye");
  
             server.removeUser(userName, this);
-            socket.close();
+            
  
             serverMessage = "[MENSAJE DEL SERVIDOR]: el usuario: " + userName + " se ha desconectado.";
+
             server.broadcast(serverMessage, this);
+
+            socket.close();
  
         } catch (IOException e) {
             System.err.println(e);

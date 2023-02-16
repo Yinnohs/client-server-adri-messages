@@ -24,27 +24,22 @@ public class MessageSender extends Thread {
     }
  
     public void run() {
- 
-        Console console = System.console();
- 
-        String userName = console.readLine("\nColoca tu nombre: ");
-        client.setUserName(userName);
-        writer.println(userName);
- 
-        String text;
- 
-        while(true) {
-            text = console.readLine("#: ");
-            if(text.equals("bye")){
-                writer.println("goodbye");
-                break;
-            }
-            writer.println(text);
- 
-        }
- 
         try {
-            socket.close();
+            Console console = System.console();
+    
+            String userName = console.readLine("\nColoca tu nombre: ");
+            client.setUserName(userName);
+            writer.println(userName);
+    
+            String text;
+    
+            do {
+                text = console.readLine("#: ");
+                writer.println(text);
+            }while(!text.equals("bye"));
+
+            
+                socket.close();
         } catch (IOException e) {
  
             System.out.println("[Error del Servidor]: " + e.getMessage());

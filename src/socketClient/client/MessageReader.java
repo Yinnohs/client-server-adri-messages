@@ -24,24 +24,28 @@ public class MessageReader extends Thread {
     }
  
     public void run() {
-        while (true) {
-            try {
-                String response = reader.readLine();
-                System.out.println("\n" + response);
+        try {
+                while (true) {
                 
-                if (client.getUserName() != null) {
-                    System.out.print("#:");
-                }
+                    String response = reader.readLine();
 
-                if(response == null){
-                    System.exit(0);
-                }
+                    System.out.println("\n" + response);
+                    
+                    if(response.equals("goodbye")){
+                        break;
+                    }
+                    
+                    if (client.getUserName() != null) {
+                        System.out.print("#:");
+                    }
 
+                    
+                }
+                socket.close();
             } catch (IOException e) {
                 System.err.println("[ERROR AL LEER DEL SERVIDOR]:" + e.getMessage());
-                break;
             }
-        }
+        
     }
     
 }
