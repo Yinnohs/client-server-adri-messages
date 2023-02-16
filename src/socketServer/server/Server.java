@@ -3,6 +3,7 @@ package socketServer.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,7 +11,7 @@ import java.util.Set;
 public class Server {
     // Instanciación de atributos.
     private int port; // asignación del puerto a usar.
-    private Set<String> userNames = new HashSet<>(); // Creación de una colección de objetos no duplicados para los usuarios.
+    private ArrayList<String> userNames = new ArrayList<>(); // Creación de una colección de objetos no duplicados para los usuarios.
     private Set<ClientHandler> clients = new HashSet<>(); // Creación de una colección de objetos no duplicados para los hilos hijos.
     private MessagesStorage messages = new MessagesStorage(); // Instanciación de almacenado global de mensajes.
 
@@ -70,7 +71,7 @@ public class Server {
     }
  
     // Getter de los usuarios.
-    protected Set<String> getUserNames() {
+    protected ArrayList<String> getUserNames() {
         return this.userNames;
     }
  
