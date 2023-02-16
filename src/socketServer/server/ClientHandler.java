@@ -67,7 +67,10 @@ public class ClientHandler extends Thread {
                 if(clientMsg.startsWith("message:")){
                     int userMessageIndex = clientMsg.indexOf(":") + 1;
                     prevMessage =  clientMsg.substring(0, clientMsg.indexOf(":"));
-                    clientMsg = clientMsg.substring( userMessageIndex, clientMsg.length());
+                    clientMsg = clientMsg.substring(userMessageIndex, clientMsg.length());
+                } else {
+                    System.out.println(userName + " ha escrito un mensaje ERRONEO");
+                    server.senderErrorMessage(this);
                 }
                 
                 // Condición en la que si "prevMessage es = message" genera el mensaje a enviar.

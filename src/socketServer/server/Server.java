@@ -50,6 +50,10 @@ public class Server {
             }
         }
     }
+
+    protected void senderErrorMessage(ClientHandler client) {
+        client.sendMessage("El mensaje para ser enviado tiene que empezar por <message:>");
+    }
  
     // Añade nuevos usuarios al servidor.
     protected void addUserName(String userName) {
