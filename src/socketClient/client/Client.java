@@ -9,7 +9,6 @@ public class Client {
     // Atributos del cliente.
     private String hostname; // Dirección IP o dirección DNS del servidor.
     private int port; // Puerto externo del servidor.
-    private String userName; // Nombre del usuario.
  
     // Constructor del cliente.
     public Client(String hostname, int port) {
@@ -29,9 +28,9 @@ public class Client {
             System.out.println("---------------------------------------------------------------");
 
             // instanciación y ejecución del hilo hijo de lectura.
-            new MessageReader(socket, this).start();
+            new MessageReader(socket).start();
             // instanciación y ejecución del hilo hijo de escritura.
-            new MessageSender(socket, this).start();
+            new MessageSender(socket).start();
  
         } catch (UnknownHostException e) {
             System.out.println("[ERROR]: Servidor no encontrado -> " + e.getMessage());
@@ -39,15 +38,6 @@ public class Client {
             System.out.println("[ERROR DE I/O]: " + e.getMessage());
         }
  
-    }
-
-    // Setter del usuario.
-    void setUserName(String userName) {
-        this.userName = userName;
-    }
-    // Getter del usuario.
-    String getUserName() {
-        return this.userName;
     }
 
     // Función de ejecución.
