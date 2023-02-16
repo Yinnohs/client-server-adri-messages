@@ -38,9 +38,7 @@ public class MessageSender extends Thread {
                 writer.println(text);
             }while(!text.equals("bye"));
 
-                socket.close();
-                
-        } catch (IOException e) {
+        } catch (Exception e) {
  
             System.out.println("[Error del Servidor]: " + e.getMessage());
         }

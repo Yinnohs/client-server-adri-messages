@@ -71,7 +71,6 @@ public class ClientHandler extends Thread {
  
             server.removeUser(userName, this);
             
- 
             serverMessage = "[MENSAJE DEL SERVIDOR]: el usuario: " + userName + " se ha desconectado.";
 
             server.broadcast(serverMessage, this);
